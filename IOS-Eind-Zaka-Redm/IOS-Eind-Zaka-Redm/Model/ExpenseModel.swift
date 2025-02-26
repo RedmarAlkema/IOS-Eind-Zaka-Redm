@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct Expense: Identifiable {
+    var id: UUID = UUID()
+    var amount: Double
+    var currency: String
+    var description: String
+    var date: Date
+}

@@ -11,7 +11,7 @@ import SwiftUI
 struct IOS_Eind_Zaka_RedmApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
         }
     }
 }

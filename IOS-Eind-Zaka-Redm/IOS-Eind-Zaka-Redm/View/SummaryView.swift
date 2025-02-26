@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct SummaryView: View {
+    @ObservedObject var viewModel = ExpenseViewModel()
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack {
+                List(viewModel.totalPerCurrency(), id: \.key) { currency, total in
+                    HStack {
+                        Text(currency)
+                            .font(.headline)
+                        Spacer()
+                        Text("\(total, specifier: "%.2f")")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.vertical, 5)
+                }
+                .navigationTitle("Expense Summary")
+            }
+        }
     }
 }
 
