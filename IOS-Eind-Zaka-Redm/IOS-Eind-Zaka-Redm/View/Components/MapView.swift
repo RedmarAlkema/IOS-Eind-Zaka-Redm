@@ -1,8 +1,22 @@
-//
-//  MapView.swift
-//  IOS-Eind-Zaka-Redm
-//
-//  Created by Redmar Alkema on 26/02/2025.
-//
+import SwiftUI
+import MapKit
 
-import Foundation
+struct MapView: View {
+    var coordinate: CLLocationCoordinate2D
+
+    @State private var region: MKCoordinateRegion
+
+    init(coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
+        self._region = State(initialValue: MKCoordinateRegion(
+            center: coordinate,
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        ))
+    }
+
+    var body: some View {
+        Map(coordinateRegion: $region)
+            .frame(height: 300)
+            .cornerRadius(10)
+    }
+}

@@ -12,20 +12,8 @@ struct SummaryView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                List(viewModel.totalPerCurrency(), id: \.key) { currency, total in
-                    HStack {
-                        Text(currency)
-                            .font(.headline)
-                        Spacer()
-                        Text("\(total, specifier: "%.2f")")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.vertical, 5)
-                }
-                .navigationTitle("Expense Summary")
-            }
+            VStack {               
+            }.navigationTitle("Expense Summary")
         }
     }
 }

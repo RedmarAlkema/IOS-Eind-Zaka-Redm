@@ -13,8 +13,8 @@ struct ExpenseView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                List(viewModel.expenses) { expense in
+            List(viewModel.expenses) { expense in
+                NavigationLink(destination: EditExpenseView(expense: expense, viewModel: viewModel)) {
                     HStack {
                         Image(systemName: "creditcard.fill")
                             .foregroundColor(.blue)
@@ -25,25 +25,20 @@ struct ExpenseView: View {
                             Text("\(expense.amount, specifier: "%.2f") \(expense.currency)")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            Text(formatDate(expense.date))
+                            Text(expense.date.formatted(date: .numeric, time: .shortened))
                                 .font(.caption)
                                 .foregroundColor(.blue)
-                            Text(formatTime(expense.date))
-                                .font(.caption)
-                                .foregroundColor(.gray)
                         }
+                        Spacer()
                     }
                     .padding(.vertical, 5)
                 }
-                .navigationTitle("My Expenses")
-                .toolbar {
-                    Button(action: { showAddExpense = true }) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title)
-                    }
+            }
+            .navigationTitle("My Expenses")            
+            .toolbar {
+                Button(action: { showAddExpense = true }) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title)
                 }
             }
             .sheet(isPresented: $showAddExpense) {
@@ -51,22 +46,7 @@ struct ExpenseView: View {
             }
         }
     }
-
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
-    }
-
-    private func formatTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
 }
-
 
 #Preview {
     ExpenseView()
