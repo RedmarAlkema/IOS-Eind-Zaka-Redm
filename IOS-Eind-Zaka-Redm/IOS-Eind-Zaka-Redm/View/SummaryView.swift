@@ -93,6 +93,7 @@ struct SummaryView: View {
                     .font(.title2)
                     .fontWeight(.bold)
                     .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Picker("Periode", selection: $selectedPeriod) {
                     ForEach(Period.allCases, id: \ .self) { period in
@@ -100,7 +101,7 @@ struct SummaryView: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .padding()
+                .padding(.horizontal)
                 
                 Picker("Grafiektype", selection: $chartType) {
                     ForEach(ChartType.allCases, id: \ .self) { type in
