@@ -1,5 +1,4 @@
 import SwiftUI
-import MapKit
 
 struct EditExpenseView: View {
     @ObservedObject var viewModel: ExpenseViewModel
@@ -17,7 +16,6 @@ struct EditExpenseView: View {
             Form {
                 Section(header: Text("Edit Expense")) {
                     TextField("Amount", value: $expense.amount, formatter: NumberFormatter())
-                        .keyboardType(.decimalPad)
 
                     Picker("Currency", selection: $expense.currency) {
                         Text("THB (Baht)").tag("THB")
@@ -29,14 +27,6 @@ struct EditExpenseView: View {
                     .pickerStyle(MenuPickerStyle())
 
                     TextField("Description", text: $expense.description)
-                }
-
-                if let location = expense.location {
-                    Section(header: Text("Purchase Location")) {
-                        MapView(coordinate: location.toCoordinate())
-                            .frame(height: 200)
-                            .cornerRadius(10)
-                    }
                 }
 
                 Section {

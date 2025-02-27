@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ExpenseView: View {
     @ObservedObject var viewModel = ExpenseViewModel()
+
     @State private var selectedCurrency: String = "EUR" // ✅ Default to EUR
     @State private var showAddExpense = false // ✅ For the add expense button
 
@@ -19,6 +20,7 @@ struct ExpenseView: View {
                 .padding(.horizontal)
 
                 List(viewModel.expenses) { expense in
+                    NavigationLink(destination: EditExpenseView(expense: expense, viewModel: viewModel)) {
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
                             // 📌 Description & date
@@ -49,7 +51,7 @@ struct ExpenseView: View {
                                     Text("🚨 Geen koers")
                                         .font(.caption)
                                         .foregroundColor(.red)
-                                }
+                                }}
                             }
                         }
                         .padding(.vertical, 5)
@@ -82,6 +84,21 @@ struct ExpenseView: View {
             }
         }
     }
+
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+    
+    private func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+}
 
     // 📌 Helper function to format numbers
     private func formattedAmount(_ amount: Double) -> String {

@@ -1,22 +1,19 @@
 import SwiftUI
-import CoreLocation
 
 struct AddExpenseView: View {
     @ObservedObject var viewModel: ExpenseViewModel
     @State private var amount: String = ""
     @State private var currency: String = "USD"
     @State private var description: String = ""
-    @State private var location: CLLocationCoordinate2D?
 
     @Environment(\.presentationMode) var presentationMode
-    private let locationManager = LocationManager()
+    private let transactionController = TransactionController()
 
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Expense Details")) {
                     TextField("Amount", text: $amount)
-                        .keyboardType(.decimalPad)
 
                     Picker("Currency", selection: $currency) {
                         Text("THB (Baht)").tag("THB")
@@ -33,10 +30,9 @@ struct AddExpenseView: View {
                 Section {
                     Button(action: {
                         if let amountValue = Double(amount) {
-                            locationManager.requestLocation { coordinates in
-                                viewModel.addExpense(amount: amountValue, currency: currency, description: description, location: coordinates)
-                                presentationMode.wrappedValue.dismiss()
-                            }
+                            let newExpense = Expense(amount: amountValue, currency: currency, description: description, date: Date())
+                            transactionController.addExpense(expense: newExpense, expenses: &viewModel.expenses)
+                            presentationMode.wrappedValue.dismiss()
                         }
                     }) {
                         Text("Add Expense")
@@ -49,9 +45,14 @@ struct AddExpenseView: View {
                 }
             }
             .navigationTitle("New Expense")
-            .onAppear {
-                locationManager.requestLocation { coordinates in
-                    self.location = coordinates
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.black)
+                    }
                 }
             }
         }

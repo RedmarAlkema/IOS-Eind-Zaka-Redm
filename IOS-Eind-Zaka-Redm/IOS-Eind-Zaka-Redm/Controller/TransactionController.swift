@@ -1,5 +1,4 @@
 import Foundation
-import CoreLocation
 
 class TransactionController {
     private let fileName = "expenses.json"
@@ -27,20 +26,21 @@ class TransactionController {
     }
 
     func addExpense(expense: Expense, expenses: inout [Expense]) {
-            expenses.append(expense)
+        expenses.append(expense)
         saveExpenses(expenses: expenses)
-        }
+    }
 
-        func updateExpense(updatedExpense: Expense, expenses: inout [Expense]) {
-            if let index = expenses.firstIndex(where: { $0.id == updatedExpense.id }) {
-                expenses[index] = updatedExpense
-                saveExpenses(expenses: expenses)
-            }
+    func updateExpense(updatedExpense: Expense, expenses: inout [Expense]) {
+        if let index = expenses.firstIndex(where: { $0.id == updatedExpense.id }) {
+            expenses[index] = updatedExpense
+            saveExpenses(expenses: expenses)
         }
-    
-        func deleteExpense(expense: Expense, expenses: inout [Expense]) {
-            expenses.removeAll { $0.id == expense.id }
-        }
+    }
+
+    func deleteExpense(expense: Expense, expenses: inout [Expense]) {
+        expenses.removeAll { $0.id == expense.id }
+        saveExpenses(expenses: expenses)
+    }
 
     private func getDocumentsDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
