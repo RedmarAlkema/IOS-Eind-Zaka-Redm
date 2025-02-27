@@ -1,4 +1,4 @@
-//
+	//
 //  IOS_Eind_Zaka_RedmApp.swift
 //  IOS-Eind-Zaka-Redm
 //
@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct IOS_Eind_Zaka_RedmApp: App {
-    var body: some Scene {
+    var body: some Scene {	
         WindowGroup {
             MainTabView()
         }
