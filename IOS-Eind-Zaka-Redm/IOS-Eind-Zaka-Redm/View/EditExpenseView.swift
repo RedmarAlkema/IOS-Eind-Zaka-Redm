@@ -13,46 +13,55 @@ struct EditExpenseView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Edit Expense")) {
-                    TextField("Amount", value: $expense.amount, formatter: NumberFormatter())
+            GeometryReader { geometry in
+                HStack {
+                    // Linkerkant: Formulier
+                    Form {
+                        Section(header: Text("Edit Expense")) {
+                            TextField("Amount", value: $expense.amount, formatter: NumberFormatter())
 
-                    Picker("Currency", selection: $expense.currency) {
-                        Text("THB (Baht)").tag("THB")
-                        Text("MYR (Ringgit)").tag("MYR")
-                        Text("JPY (Yen)").tag("JPY")
-                        Text("EUR (Euro)").tag("EUR")
-                        Text("USD (Dollar)").tag("USD")
+                            Picker("Currency", selection: $expense.currency) {
+                                Text("THB (Baht)").tag("THB")
+                                Text("MYR (Ringgit)").tag("MYR")
+                                Text("JPY (Yen)").tag("JPY")
+                                Text("EUR (Euro)").tag("EUR")
+                                Text("USD (Dollar)").tag("USD")
+                            }
+                            .pickerStyle(MenuPickerStyle())
+
+                            TextField("Description", text: $expense.description)
+                        }
                     }
-                    .pickerStyle(MenuPickerStyle())
+                    .frame(width: geometry.size.width * 0.6) // 60% van het scherm voor formulier
 
-                    TextField("Description", text: $expense.description)
-                }
+                    // Rechterkant: Knoppen
+                    VStack(spacing: 20) {
+                        Button(action: {
+                            viewModel.updateExpense(updatedExpense: expense)
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("Save Changes")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
 
-                Section {
-                    Button(action: {
-                        viewModel.updateExpense(updatedExpense: expense)
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Save Changes")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                        Button(action: {
+                            viewModel.deleteExpense(expense: expense)
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("Delete Expense")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
                     }
-
-                    Button(action: {
-                        viewModel.deleteExpense(expense: expense)
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Delete Expense")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
+                    .frame(width: geometry.size.width * 0.35) // 35% van het scherm voor knoppen
+                    .padding()
                 }
             }
             .navigationTitle("Edit Expense")

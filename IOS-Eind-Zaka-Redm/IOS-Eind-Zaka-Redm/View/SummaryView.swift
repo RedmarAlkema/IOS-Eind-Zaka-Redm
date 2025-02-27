@@ -88,71 +88,94 @@ struct SummaryView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                Text("Totaal: \(totalAmount, specifier: "%.2f") EUR")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            GeometryReader { geometry in
+                let isLandscape = geometry.size.width > geometry.size.height
                 
-                Picker("Periode", selection: $selectedPeriod) {
-                    ForEach(Period.allCases, id: \ .self) { period in
-                        Text(period.rawValue).tag(period)
+                if isLandscape {
+                    HStack {
+                        optionsView
+                            .frame(width: geometry.size.width * 0.4)
+                            .padding()
+                        
+                        chartView
+                            .frame(width: geometry.size.width * 0.5)
+                            .padding()
+                    }
+                } else {
+                    VStack {
+                        optionsView
+                        chartView
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.horizontal)
-                
-                Picker("Grafiektype", selection: $chartType) {
-                    ForEach(ChartType.allCases, id: \ .self) { type in
-                        Text(type.rawValue).tag(type)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                
-                switch selectedPeriod {
-                case .day:
-                    DatePicker("Selecteer een dag", selection: $selectedDate, displayedComponents: .date)
-                        .datePickerStyle(.compact)
-                        .padding()
-                case .week:
-                    Stepper("Week \(selectedWeek), \(selectedYear)", value: $selectedWeek, in: 1...53)
-                        .padding()
-                case .month:
-                    Stepper("Maand: \(Calendar.current.shortMonthSymbols[selectedMonth - 1]) \(selectedYear)", value: $selectedMonth, in: 1...12)
-                        .padding()
-                case .year:
-                    Stepper("Jaar: \(selectedYear)", value: $selectedYear, in: 2000...Calendar.current.component(.year, from: Date()))
-                        .padding()
-                }
-                
-                Chart {
-                    ForEach(timeUnits, id: \ .self) { unit in
-                        if chartType == .line {
-                            LineMark(
-                                x: .value("Tijd", unit),
-                                y: .value("Uitgaven", groupedExpenses[unit] ?? 0)
-                            )
-                            .foregroundStyle(.blue)
-                        } else {
-                            BarMark(
-                                x: .value("Tijd", unit),
-                                y: .value("Uitgaven", groupedExpenses[unit] ?? 0)
-                            )
-                            .foregroundStyle(.blue)
-                        }
-                    }
-                }
-                .chartXAxis { AxisMarks(position: .bottom) { AxisValueLabel() } }
-                .chartYAxis { AxisMarks(position: .leading) { AxisValueLabel() } }
-                .frame(height: 300)
-                .padding()
-                
-                Spacer()
             }
             .navigationTitle("Expense Summary")
         }
+    }
+    
+    private var optionsView: some View {
+        VStack(alignment: .leading) {
+            Text("Totaal: \(totalAmount, specifier: "%.2f") EUR")
+                .font(.title2)
+                .fontWeight(.bold)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Picker("Periode", selection: $selectedPeriod) {
+                ForEach(Period.allCases, id: \.self) { period in
+                    Text(period.rawValue).tag(period)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
+            
+            Picker("Grafiektype", selection: $chartType) {
+                ForEach(ChartType.allCases, id: \.self) { type in
+                    Text(type.rawValue).tag(type)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+            
+            switch selectedPeriod {
+            case .day:
+                DatePicker("Selecteer een dag", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                    .padding()
+            case .week:
+                Stepper("Week \(selectedWeek), \(selectedYear)", value: $selectedWeek, in: 1...53)
+                    .padding()
+            case .month:
+                Stepper("Maand: \(Calendar.current.shortMonthSymbols[selectedMonth - 1]) \(selectedYear)", value: $selectedMonth, in: 1...12)
+                    .padding()
+            case .year:
+                Stepper("Jaar: \(selectedYear)", value: $selectedYear, in: 2000...Calendar.current.component(.year, from: Date()))
+                    .padding()
+            }
+        }
+    }
+    
+    private var chartView: some View {
+        Chart {
+            ForEach(timeUnits, id: \.self) { unit in
+                if chartType == .line {
+                    LineMark(
+                        x: .value("Tijd", unit),
+                        y: .value("Uitgaven", groupedExpenses[unit] ?? 0)
+                    )
+                    .foregroundStyle(.blue)
+                } else {
+                    BarMark(
+                        x: .value("Tijd", unit),
+                        y: .value("Uitgaven", groupedExpenses[unit] ?? 0)
+                    )
+                    .foregroundStyle(.blue)
+                }
+            }
+        }
+        .chartXAxis { AxisMarks(position: .bottom) { AxisValueLabel() } }
+        .chartYAxis { AxisMarks(position: .leading) { AxisValueLabel() } }
+        .frame(height: 220)
+        .padding()
     }
 }
 

@@ -70,6 +70,7 @@ struct ExpenseView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     .padding(.horizontal)
+                    .padding(.bottom, 10)
                 }
                 .sheet(isPresented: $showAddExpense) {
                     AddExpenseView(viewModel: viewModel)
