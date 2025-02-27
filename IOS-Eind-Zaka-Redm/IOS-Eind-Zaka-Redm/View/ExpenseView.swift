@@ -1,9 +1,10 @@
 //
-//  ExpenseView.swift
+//  ExpenseView 2.swift
 //  IOS-Eind-Zaka-Redm
 //
-//  Created by Redmar Alkema on 25/02/2025.
+//  Created by Redmar Alkema on 27/02/2025.
 //
+
 
 import SwiftUI
 
@@ -34,7 +35,7 @@ struct ExpenseView: View {
                     .padding(.vertical, 5)
                 }
             }
-            .navigationTitle("My Expenses")            
+            .navigationTitle("My Expenses")
             .toolbar {
                 Button(action: { showAddExpense = true }) {
                     Image(systemName: "plus.circle.fill")
@@ -46,8 +47,4 @@ struct ExpenseView: View {
             }
         }
     }
-}
-
-#Preview {
-    ExpenseView()
 }
