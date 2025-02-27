@@ -98,7 +98,6 @@ struct ExpenseView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-}
 
     // 📌 Helper function to format numbers
     private func formattedAmount(_ amount: Double) -> String {
