@@ -23,7 +23,7 @@ class TransactionController {
             print("Geen opgeslagen uitgaven gevonden of fout bij laden: \(error)")
             return []
         }
-    }
+    } 
 
     func addExpense(expense: Expense, expenses: inout [Expense]) {
         expenses.append(expense)

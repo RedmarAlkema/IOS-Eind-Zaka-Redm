@@ -15,7 +15,6 @@ struct EditExpenseView: View {
         NavigationView {
             GeometryReader { geometry in
                 HStack {
-                    // Linkerkant: Formulier
                     Form {
                         Section(header: Text("Edit Expense")) {
                             TextField("Amount", value: $expense.amount, formatter: NumberFormatter())
@@ -32,9 +31,8 @@ struct EditExpenseView: View {
                             TextField("Description", text: $expense.description)
                         }
                     }
-                    .frame(width: geometry.size.width * 0.6) // 60% van het scherm voor formulier
+                    .frame(width: geometry.size.width * 0.6)
 
-                    // Rechterkant: Knoppen
                     VStack(spacing: 20) {
                         Button(action: {
                             viewModel.updateExpense(updatedExpense: expense)
@@ -60,7 +58,7 @@ struct EditExpenseView: View {
                                 .cornerRadius(8)
                         }
                     }
-                    .frame(width: geometry.size.width * 0.35) // 35% van het scherm voor knoppen
+                    .frame(width: geometry.size.width * 0.35)
                     .padding()
                 }
             }
