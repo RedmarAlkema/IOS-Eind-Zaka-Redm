@@ -3,16 +3,15 @@ import SwiftUI
 struct ExpenseView: View {
     @ObservedObject var viewModel = ExpenseViewModel()
 
-    @State private var selectedCurrency: String = "EUR" // ✅ Default to EUR
-    @State private var showAddExpense = false // ✅ For the add expense button
+    @State private var selectedCurrency: String = "EUR" 
+    @State private var showAddExpense = false
 
     var body: some View {
         NavigationView {
             VStack {
-                // 🔻 Dropdown menu for currency selection
                 Picker("Toon in:", selection: $selectedCurrency) {
                     ForEach(viewModel.exchangeRates.keys.sorted(), id: \.self) { currency in
-                        let symbol = currencySymbol(for: currency) ?? "" // ✅ Get symbol or empty string
+                        let symbol = currencySymbol(for: currency) ?? "" 
                         Text(symbol.isEmpty ? currency : "\(symbol) \(currency)").tag(currency)
                     }
                 }
@@ -23,7 +22,6 @@ struct ExpenseView: View {
                     NavigationLink(destination: EditExpenseView(expense: expense, viewModel: viewModel)) {
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
-                            // 📌 Description & date
                             VStack(alignment: .leading) {
                                 Text(expense.description)
                                     .font(.headline)
@@ -34,15 +32,12 @@ struct ExpenseView: View {
                             }
                             Spacer()
 
-                            // 📌 Original amount (Blue) + Converted amount (Small & Gray)
                             VStack(alignment: .trailing) {
-                                // 🔹 Original amount (Blue)
                                 Text("\(currencySymbol(for: expense.currency) ?? "")\(formattedAmount(expense.amount)) \(expense.currency)")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
-                                    .foregroundColor(.blue) // ✅ Terug naar blauw!
+                                    .foregroundColor(.blue) 
 
-                                // 🔹 Converted amount (Small & Gray)
                                 if let convertedAmount = viewModel.convertAmount(amount: expense.amount, from: expense.currency, to: selectedCurrency) {
                                     Text("≈ \(currencySymbol(for: selectedCurrency) ?? "")\(formattedAmount(convertedAmount)) \(selectedCurrency)")
                                         .font(.caption)
@@ -58,7 +53,6 @@ struct ExpenseView: View {
                     }
                 }
 
-                // 🔹 Add expense button at the bottom
                 Button(action: { showAddExpense = true }) {
                     HStack {
                         Image(systemName: "plus.circle.fill")
@@ -78,7 +72,6 @@ struct ExpenseView: View {
             }
             .navigationTitle("Mijn Uitgaven")
             .onAppear {
-                // ✅ Set default currency to first expense currency if available
                 if selectedCurrency == "EUR", let firstExpense = viewModel.expenses.first {
                     selectedCurrency = firstExpense.currency
                 }
@@ -100,14 +93,12 @@ struct ExpenseView: View {
         return formatter.string(from: date)
     }
 
-    // 📌 Helper function to format numbers
     private func formattedAmount(_ amount: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
     }
 
-    // 📌 Helper function to map currency codes to symbols
     private func currencySymbol(for currency: String) -> String? {
         let symbols: [String: String] = [
             "EUR": "€", "USD": "$", "GBP": "£", "JPY": "¥", "THB": "฿", "MYR": "RM",
@@ -115,6 +106,6 @@ struct ExpenseView: View {
             "KRW": "₩", "MXN": "Mex$", "NOK": "kr", "NZD": "NZ$", "PHP": "₱", "RUB": "₽",
             "SEK": "kr", "SGD": "S$", "ZAR": "R"
         ]
-        return symbols[currency] // ✅ Returns nil if no symbol is available
+        return symbols[currency] 
     }
 }

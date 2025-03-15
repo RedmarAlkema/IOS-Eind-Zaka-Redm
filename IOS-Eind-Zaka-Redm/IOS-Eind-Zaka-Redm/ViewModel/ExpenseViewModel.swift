@@ -9,7 +9,7 @@ class ExpenseViewModel: ObservableObject {
     
     init() {
         loadExpenses()
-        fetchExchangeRates(baseCurrency: "EUR") // Basisvaluta
+        fetchExchangeRates(baseCurrency: "EUR")
         addTestData()
 
     }
@@ -51,7 +51,7 @@ class ExpenseViewModel: ObservableObject {
     
     func convertAmount(amount: Double, from fromCurrency: String, to toCurrency: String) -> Double? {
         guard let fromRate = exchangeRates[fromCurrency], let toRate = exchangeRates[toCurrency] else {
-            return nil // ✅ Geef nil terug als conversie niet mogelijk is
+            return nil
         }
         return (amount / fromRate) * toRate
     }
@@ -69,7 +69,6 @@ class ExpenseViewModel: ObservableObject {
         return grouped.map { (key: $0.key, value: $0.value.reduce(0) { $0 + $1.amount }) }
     }
     
-    // 📌 **Wisselkoers API ophalen**
     func fetchExchangeRates(baseCurrency: String) {
         exchangeService.fetchExchangeRates(baseCurrency: baseCurrency) { rates in
             DispatchQueue.main.async {
@@ -78,10 +77,9 @@ class ExpenseViewModel: ObservableObject {
         }
     }
 
-    // 📌 **Valutaconversie**
     func convertAmount(amount: Double, from fromCurrency: String, to toCurrency: String) -> Double {
         guard let fromRate = exchangeRates[fromCurrency], let toRate = exchangeRates[toCurrency] else {
-            return amount // Geen conversie mogelijk
+            return amount 
         }
         return (amount / fromRate) * toRate
     }
