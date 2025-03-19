@@ -14,30 +14,30 @@ class ExpenseViewModel: ObservableObject {
 
     }
 
-        func addTestData() {
-            let calendar = Calendar.current
-            let now = Date()
+    func addTestData() {
+        let calendar = Calendar.current
+        let now = Date()
 
-            let descriptions = ["Lunch", "Boodschappen", "Koffie", "Tankbeurt", "Bioscoop"]
-            let amounts: [Double] = [10.5, 20.0, 5.75, 50.0, 15.0]
+        let descriptions = ["Lunch", "Boodschappen", "Koffie", "Tankbeurt", "Bioscoop"]
+        let amounts: [Double] = [10.5, 20.0, 5.75, 50.0, 15.0]
 
-            for dayOffset in 0..<7 {
-                let date = calendar.date(byAdding: .day, value: -dayOffset, to: now)!
+        for dayOffset in 0..<7 {
+            let date = calendar.date(byAdding: .day, value: -dayOffset, to: now)!
 
-                for i in 0..<5 {
-                    let expenseDate = calendar.date(byAdding: .hour, value: i * 3, to: date)!
+            for i in 0..<5 {
+                let expenseDate = calendar.date(byAdding: .hour, value: i * 3, to: date)!
 
-                    let expense = Expense(
-                        amount: amounts[i],
-                        currency: "EUR",
-                        description: descriptions[i],
-                        date: expenseDate
-                    )
+                let expense = Expense(
+                    amount: amounts[i],
+                    currency: "EUR",
+                    description: descriptions[i],
+                    date: expenseDate
+                )
 
-                    expenses.append(expense)
-                }
+                expenses.append(expense)
             }
         }
+    }
     
     
     private func loadExpenses() {
